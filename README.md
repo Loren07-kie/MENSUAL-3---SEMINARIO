@@ -133,3 +133,13 @@ La ficha permite elegir una imagen o pulsar «Usar cámara» para tomar una foto
 El stream se detiene al cerrar la cámara, abandonar la sección, ocultar la página, abrir el acceso de usuarios, cerrar sesión o reiniciar la ficha. Los permisos pendientes y las capturas que terminan después de cerrar se cancelan mediante un identificador de solicitud. Hay mensajes para permisos rechazados, cámara no disponible y cámara ocupada. El formulario de características sigue siendo manual y no se deduce el género.
 
 Pruebas de ciclo de vida de cámara (sin depender de hardware): `node --test tests/personal_camera.test.cjs`. La comprobación física requiere HTTPS, una cámara conectada y permiso del navegador.
+
+## Sugerencias visuales desde una fotografía
+
+Al insertar o capturar una foto, la ficha ejecuta MediaPipe Face Landmarker y Selfie Multiclass Segmentation en el navegador, usando `@mediapipe/tasks-vision` 1.2.2. La biblioteca WASM y los modelos se descargan desde jsDelivr y el almacenamiento oficial de Google. La imagen no se envía a esos servicios: la inferencia y el muestreo de píxeles se realizan en el dispositivo.
+
+La segmentación separa cabello y piel facial; el modelo facial localiza rostro e iris. Se calculan colores medianos de las regiones segmentadas y del anillo del iris, descartando reflejos y pupilas muy oscuras. El resultado sugiere color aparente de cabello, ojos y tono de piel visible. Son categorías heurísticas bajo esa iluminación, no identificación, medición clínica ni inferencia de etnia. No se determina el género, la edad, las emociones ni el estado mental. Tipo y largo del cabello y uso de lentes se completan manualmente. Los valores sugeridos pueden corregirse. Las ediciones manuales se conservan hasta pulsar «Analizar de nuevo».
+
+Si no hay un rostro único suficientemente grande o el iris no tiene resolución suficiente, no se inventan valores. Hay estados de error para fotos sin rostro y fallos de carga de modelos. La primera ejecución requiere internet para descargar aproximadamente 20 MB de modelos, además de WASM. El retrato `static/portrait-example.webp` es una persona ficticia generada para demostración; no se usa para entrenar los modelos preentrenados.
+
+Pruebas: `node --test tests/appearance_colors.test.cjs tests/personal_camera.test.cjs`. Estas pruebas validan el muestreo de color y el ciclo de captura; no sustituyen la validación visual con cámara ni una evaluación de precisión sobre personas.

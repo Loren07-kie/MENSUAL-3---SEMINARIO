@@ -14,11 +14,11 @@ function setup(getUserMedia){
       removeAttribute(key){delete this[key];},play:async()=>{},reset(){},querySelector(){return {value:'Prefiero no indicarlo'};}});
     return elements.get(id);
   };
-  const window={addEventListener:(type,fn)=>(windowHandlers[type]??=[]).push(fn),stopObjectCamera(){}};
+  const window={dispatchEvent(event){for(const fn of windowHandlers[event.type]||[])fn(event);},addEventListener:(type,fn)=>(windowHandlers[type]??=[]).push(fn),stopObjectCamera(){}};
   const canvas={getContext:()=>({translate(){},scale(){},drawImage(){calls.draw++;}}),toBlob:cb=>cb(new Blob(['photo'],{type:'image/jpeg'}))};
   const document={hidden:false,addEventListener:(type,fn)=>(documentHandlers[type]??=[]).push(fn),createElement:()=>canvas};
   const location={hash:'#ficha'};
-  const context={$,window,document,location,navigator:{mediaDevices:{getUserMedia}},Blob,File,
+  const context={$,window,document,location,navigator:{mediaDevices:{getUserMedia}},Blob,File,Event,
     FormData:class{get(k){return k==='gender'?'Prefiero no indicarlo':'';}},
     Image:class{set src(value){this.onload?.();}},
     URL:{createObjectURL:()=> 'blob:local-photo',revokeObjectURL(){}},
