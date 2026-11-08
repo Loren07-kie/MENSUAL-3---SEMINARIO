@@ -95,7 +95,7 @@ Se revisó EduShield IA del mensual 2 (alerta de deserción y seguimiento) y los
 
 ## Cuaderno académico
 
-El archivo `notebooks/Nexo_Lab_Proyecto_3.ipynb` está ejecutado e incluye análisis exploratorio, entrenamiento explícito, línea base, validación cruzada de regresión, diagnóstico de residuos, distribución de clases, matriz de confusión y aumento de imágenes de entrenamiento por rotación. También ejecuta MobileNetV2 sobre tres ejemplos y muestra sus errores. Instala `python -m pip install -r requirements-notebook.txt` para repetirlo en Jupyter o VS Code. Sus 21 celdas contienen resultados y gráficos calculados, no inventados.
+El archivo `notebooks/Nexo_Lab_Proyecto_3.ipynb` está ejecutado e incluye análisis exploratorio, entrenamiento explícito, línea base, validación cruzada de regresión, diagnóstico de residuos, distribución de clases, matriz de confusión y aumento de imágenes de entrenamiento por rotación. También ejecuta MobileNetV2 sobre tres ejemplos y muestra sus errores. Instala `python -m pip install -r requirements-notebook.txt` para repetirlo en Jupyter o VS Code. Sus 23 celdas contienen resultados y gráficos calculados, no inventados.
 
 
 ## Modelo de objetos y recursos v2

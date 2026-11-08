@@ -1,0 +1,22 @@
+PROYECTO SIGNIFICATIVO 3 - NEXO LAB
+Lorena Abigail Coca Ccorpa - SENATI
+
+1. Extrae todo el ZIP en una carpeta de tu PC.
+2. Instala Python 3.13 si aun no lo tienes.
+3. Ejecuta INICIAR_NEXO_LAB.bat o sigue el README.
+4. Abre http://127.0.0.1:5000 y crea tu propia cuenta.
+5. El cuaderno esta en notebooks/Nexo_Lab_Proyecto_3.ipynb.
+   Para Jupyter instala requirements-notebook.txt.
+
+El ZIP incluye codigo, datasets, pruebas, imagenes y los pesos MobileNetV2.
+No contiene contrasenas, sesiones ni datos de usuarios registrados.
+El analisis de fotografia requiere Internet para descargar los modelos
+MediaPipe al navegador. La fotografia se procesa localmente.
+El genero siempre se selecciona manualmente.
+
+Web publica: https://nexo-lab-mensual3.onrender.com/
+Repositorio: https://github.com/Loren07-kie/MENSUAL-3---SEMINARIO
+
+Datos de clase integrados: semanas 9 a 12.
+Periodo del informe: 12 de octubre al 6 de noviembre de 2026.
+Version documentada y verificada: 8 de noviembre de 2026.
