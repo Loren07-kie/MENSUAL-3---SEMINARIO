@@ -10,7 +10,7 @@ Estudiante: **Lorena Abigail Coca Ccorpa** · SENATI · 2026.
 - **Taller predictivo:** regresión lineal múltiple para estimar costos de impresión 3D a partir de gramos, horas y complejidad. Explicación de aportes, gráfico real/predicho, R² y MAE calculados sobre prueba, CSV de ejemplo y entrenamiento de experimentos independientes con CSV propio.
 - **Reconocimiento IA:** lienzo táctil para dibujar dígitos, ejemplos del dataset Digits, clasificación con regresión logística, distribución de probabilidades, entrada 8×8 y matriz de confusión.
 - **Reconocer objetos:** MobileNetV2 preentrenada sobre ImageNet, 1000 categorías (incluye más de 100 objetos cotidianos), fotografía o captura de cámara, recorte central, top-5 y catálogo buscable con traducciones frecuentes. Clasifica un contenido principal; no es un detector múltiple ni un sistema de emociones. Pesos ONNX descargados de su fuente oficial y verificados con SHA-256 al primer uso, ejecutados con OpenCV DNN.
-- **Apariencia:** logo PNG y fondo originales generados para el proyecto, títulos de grafiti, animación al desplazarse, movimiento suave y tres temas persistentes: beige, oscuro y blanco. Se respeta `prefers-reduced-motion`.
+- **Apariencia:** logo de imagen y fondo originales generados para el proyecto, títulos de grafiti, animación al desplazarse, movimiento suave y tres temas persistentes: beige, oscuro y blanco. Se respeta `prefers-reduced-motion`.
 - **Ruta de aprendizaje:** relación explícita entre clases y funciones, arquitectura y documentación oficial.
 - **Bitácora:** últimos 100 experimentos en localStorage, exportación JSON y borrado con confirmación. No almacena imágenes.
 
