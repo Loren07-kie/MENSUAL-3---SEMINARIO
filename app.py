@@ -19,8 +19,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from object_model import catalog, classify_object
+from accounts import configure_accounts
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 app = Flask(__name__)
+configure_accounts(app)
+if os.environ.get('RENDER'):
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1)
 app.config.update(MAX_CONTENT_LENGTH=9 * 1024 * 1024, MAX_FORM_MEMORY_SIZE=9 * 1024 * 1024)
 Image.MAX_IMAGE_PIXELS = 20_000_000
 cv2.setNumThreads(1)

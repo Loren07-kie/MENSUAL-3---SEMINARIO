@@ -1,6 +1,6 @@
 'use strict';
 const $ = (id) => document.getElementById(id);
-const routes = {inicio:'Vista general',vision:'Estudio de visión',prediccion:'Taller predictivo',digitos:'Reconocimiento IA',aprendizaje:'Ruta de aprendizaje',bitacora:'Mi bitácora',objetos:'Reconocer objetos'};
+const routes = {inicio:'Vista general',vision:'Estudio de visión',prediccion:'Taller predictivo',digitos:'Reconocimiento IA',aprendizaje:'Ruta de aprendizaje',bitacora:'Mi bitácora',objetos:'Reconocer objetos',ficha:'Mi ficha personal'};
 let history = [];
 try { const saved=JSON.parse(localStorage.getItem('nexo-history') || '[]'); if(Array.isArray(saved)) history=saved.filter(x=>x&&typeof x.title==='string'&&typeof x.detail==='string'&&typeof x.date==='string'&&['vision','prediccion','digitos','datos','objetos'].includes(x.type)).slice(0,100); } catch {}
 let metrics = null;

@@ -109,3 +109,19 @@ Preprocesamiento de objetos: recorte cuadrado central previo a resize 256 para l
 Fotografías de ejemplo (copias locales, Unsplash): laptop `photo-1496181133206-80ce9b88a853`, plátanos `photo-1571771894821-ce9b6c11b08e`, café `photo-1495474472287-4d71bcdd2085`. Son ejemplos exploratorios, no un conjunto para informar precisión de ImageNet. La foto de café ilustra una confusión del recorte central; se conservan los resultados reales y no se fuerza una etiqueta.
 
 La cámara solo envía una captura al pulsar el botón y se detiene al salir de la sección, cerrar la captura o poner la página en segundo plano. Las imágenes se procesan en memoria y no se escriben en el servidor. La inferencia DNN se serializa con un lock para compartir con seguridad la red en los dos hilos Gunicorn.
+
+## Cuentas y ficha personal · versión 3
+
+Bienvenida flotante con fotografía de robot, explicación de los laboratorios, registro, inicio de sesión y acceso opcional como visitante. El nombre mostrado en «Hola» y en el perfil viene de la cuenta autenticada, no de un valor fijo ni de una fotografía.
+
+El registro solicita nombre visible, usuario (3–32 letras ASCII, números o guion bajo) y contraseña (10–128 caracteres). No se crean cuentas con contraseñas públicas ni se envían correos. Esta versión no tiene recuperación de contraseña por correo.
+
+Contraseñas con hash scrypt de Werkzeug; consultas parametrizadas; cookies HttpOnly, SameSite=Lax y Secure en Render; CSRF; rotación de sesión al entrar; sesiones revocables en base de datos y caducidad de siete días. Límites persistentes por conexión: 25 intentos de login o 10 registros por 15 minutos. No se incluyen contraseñas ni URLs privadas en GitHub.
+
+Tablas exclusivas: `nexo_lab_users`, `nexo_lab_sessions`, `nexo_lab_auth_limits`. La aplicación no modifica tablas de otros proyectos. Se reutiliza `tecnoforms-history` con autorización del propietario. Su plan gratuito vence el 6 de diciembre de 2026 en Lima: habrá que exportar/migrar o ampliar ese recurso para conservar el servicio después de la fecha; no se contrata ningún plan de pago automáticamente.
+
+Render configura `NEXO_DATABASE_URL` con `fromDatabase` y `NEXO_SECRET_KEY` con `generateValue` desde el Blueprint. Los secretos los resuelve la plataforma. Si no hay URL de Postgres en Render, los registros fallan de forma explícita; no se guardan silenciosamente en disco efímero. En desarrollo local se utiliza `data/accounts.sqlite3`, excluida de Git. Las pruebas usan bases temporales aisladas.
+
+La ficha permite género autoseleccionado y opcional, nombre o alias, cabello, ojos, tono de piel, lentes y notas. Es la misma ficha para cualquier género; no infiere género, edad, etnia, emociones ni características de la fotografía. Sus datos y la fotografía se mantienen solo en memoria del navegador, no se envían a la API y no se guardan automáticamente. La exportación JSON contiene solo los campos escritos y no la foto. Cerrar sesión limpia la ficha. Las cuentas almacenadas en Postgres solo incluyen nombre visible, usuario, hash de contraseña y datos de sesión.
+
+Endpoints: `GET /api/auth/me`, `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`. Los POST requieren el token recibido en `/me` como cabecera `X-CSRF-Token`. No hay listado público de usuarios ni rol de administrador implícito.

@@ -11,3 +11,5 @@ models/*.part
 
 static/logo-graffiti.png
 static/creative-background.png
+data/accounts.sqlite3
+data/accounts.sqlite3-*

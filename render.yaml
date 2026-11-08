@@ -14,3 +14,9 @@ services:
         value: '1'
       - key: OMP_NUM_THREADS
         value: '1'
+      - key: NEXO_DATABASE_URL
+        fromDatabase:
+          name: tecnoforms-history
+          property: connectionString
+      - key: NEXO_SECRET_KEY
+        generateValue: true
