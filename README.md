@@ -88,3 +88,8 @@ El plan gratuito puede suspenderse por inactividad; el primer acceso puede tarda
 ## Relación con los proyectos anteriores
 
 Se revisó EduShield IA del mensual 2 (alerta de deserción y seguimiento) y los materiales compartidos de las cuatro semanas. Este proyecto amplía la experiencia con procesamiento visual, cámara, comparación interactiva, modelos explicados y experimentación con datos propios. Conserva el enfoque académico y diferencia resultados reales calculados de datos sintéticos de práctica.
+
+## Cuaderno académico
+
+El archivo notebooks/Nexo_Lab_Proyecto_3.ipynb reproduce la exploración de datos, entrenamiento, explicación de predicciones, clasificación y filtros. Ábrelo con Jupyter o VS Code con soporte para notebooks; utiliza el mismo entorno de requirements.txt. Para visualizar imágenes necesita IPython, incluido en Jupyter.
+
