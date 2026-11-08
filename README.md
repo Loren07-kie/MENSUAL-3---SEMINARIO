@@ -125,3 +125,11 @@ Render configura `NEXO_DATABASE_URL` con `fromDatabase` y `NEXO_SECRET_KEY` con 
 La ficha permite género autoseleccionado y opcional, nombre o alias, cabello, ojos, tono de piel, lentes y notas. Es la misma ficha para cualquier género; no infiere género, edad, etnia, emociones ni características de la fotografía. Sus datos y la fotografía se mantienen solo en memoria del navegador, no se envían a la API y no se guardan automáticamente. La exportación JSON contiene solo los campos escritos y no la foto. Cerrar sesión limpia la ficha. Las cuentas almacenadas en Postgres solo incluyen nombre visible, usuario, hash de contraseña y datos de sesión.
 
 Endpoints: `GET /api/auth/me`, `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`. Los POST requieren el token recibido en `/me` como cabecera `X-CSRF-Token`. No hay listado público de usuarios ni rol de administrador implícito.
+
+## Cámara en Mi ficha personal
+
+La ficha permite elegir una imagen o pulsar «Usar cámara» para tomar una fotografía local. Solicita video frontal, sin audio, y muestra una vista previa tipo espejo. Solo captura al pulsar «Tomar mi foto». La foto sustituye la vista de perfil y la cámara se detiene. No se envía a la API ni se añade a la descarga JSON.
+
+El stream se detiene al cerrar la cámara, abandonar la sección, ocultar la página, abrir el acceso de usuarios, cerrar sesión o reiniciar la ficha. Los permisos pendientes y las capturas que terminan después de cerrar se cancelan mediante un identificador de solicitud. Hay mensajes para permisos rechazados, cámara no disponible y cámara ocupada. El formulario de características sigue siendo manual y no se deduce el género.
+
+Pruebas de ciclo de vida de cámara (sin depender de hardware): `node --test tests/personal_camera.test.cjs`. La comprobación física requiere HTTPS, una cámara conectada y permiso del navegador.

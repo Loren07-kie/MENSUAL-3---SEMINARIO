@@ -27,6 +27,7 @@ function updateAuthUser(user){
   if(changed)window.dispatchEvent(new Event('nexo-account-changed'));
 }
 function showAuth(){
+  stopCamera();window.stopObjectCamera?.();window.stopPersonalCamera?.();
   closeMenu();authLastFocus=document.activeElement;authOverlay.hidden=false;document.body.classList.add('auth-is-open');
   document.querySelector('.app-shell').inert=true;$('sidebar').inert=true;
   requestAnimationFrame(()=>$('auth-dialog').focus());

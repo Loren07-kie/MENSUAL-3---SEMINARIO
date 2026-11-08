@@ -5,7 +5,15 @@
       <fieldset class="gender-options"><legend>Mi género <small>Opcional</small></legend><label><input type="radio" name="gender" value="Mujer"> Mujer</label><label><input type="radio" name="gender" value="Varón"> Varón</label><label><input type="radio" name="gender" value="Otro"> Otro / lo describo yo</label><label><input type="radio" name="gender" value="Prefiero no indicarlo" checked> Prefiero no indicarlo</label></fieldset>
       <div id="personal-gender-other-wrap" hidden><label for="personal-gender-other">Así lo describo</label><input id="personal-gender-other" name="genderOther" class="form-control" maxlength="60" autocomplete="off"></div>
       <div class="personal-photo"><label for="personal-photo-input" class="personal-photo-picker"><img id="personal-photo-preview" alt="Fotografía que elegiste para tu ficha" hidden><span id="personal-photo-placeholder"><i class="bi bi-person-circle"></i><strong>Mi foto, si quiero</strong><small>Se queda en esta página</small></span><input type="file" id="personal-photo-input" accept="image/jpeg,image/png,image/webp" class="visually-hidden"></label><button type="button" id="personal-remove-photo" class="btn btn-white btn-sm mt-2" hidden>Quitar fotografía</button></div>
-      <p class="hint mt-3">El género se toma de tu elección. La fotografía no se analiza para deducirlo ni para completar los demás campos.</p>
+      <button type="button" id="personal-camera-open" class="btn btn-dark w-100 mt-3"><i class="bi bi-camera"></i> Usar cámara</button>
+      <div class="personal-camera-box" id="personal-camera-box" hidden>
+        <div class="personal-camera-heading"><span><span class="live-dot"></span> Vista de tu cámara</span><button type="button" class="icon-btn" id="personal-camera-close" aria-label="Apagar cámara"><i class="bi bi-x-lg"></i></button></div>
+        <div class="personal-camera-stage"><video id="personal-camera-video" autoplay playsinline muted aria-label="Vista previa de la cámara para tu ficha"></video><span class="personal-camera-guide" aria-hidden="true"></span></div>
+        <button type="button" id="personal-camera-capture" class="btn btn-dark w-100 mt-2"><i class="bi bi-camera-fill"></i> Tomar mi foto</button>
+        <p class="hint mt-2">Busca buena luz y centra tu rostro. Solo tomaremos la fotografía cuando pulses el botón.</p>
+      </div>
+      <p id="personal-camera-status" class="hint mt-2" role="status" aria-live="polite"></p>
+      <p class="hint mt-3">Puedes subir una foto o tomarla con la cámara. El género se toma de tu elección; los demás campos los completas tú.</p>
     </div>
     <div class="personal-details"><div class="panel"><span class="step-label">MIS CARACTERÍSTICAS / EDICIÓN MANUAL</span><h2>Los detalles los cuentas tú.</h2><div class="personal-fields">
       <div><label for="personal-hair-color">Color de cabello</label><select name="hairColor" id="personal-hair-color" class="form-select"><option value="">Sin indicar</option><option>Negro</option><option>Castaño oscuro</option><option>Castaño claro</option><option>Rubio</option><option>Pelirrojo</option><option>Canoso / blanco</option><option>Teñido / varios colores</option><option>Otro</option></select></div>
