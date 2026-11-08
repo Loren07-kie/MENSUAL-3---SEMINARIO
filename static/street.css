@@ -1,7 +1,7 @@
 /* Nexo Lab 2: street editorial, three complete color themes. */
 :root,[data-theme="beige"]{
   --surface:#fffbf3;--paper:#f3eadb;--ink:#24221f;--text:#45403a;--muted:#746b60;
-  --line:#dfd3c1;--soft:#ebe1d0;--accent:#cf481f;--accent-solid:#b93c19;--accent-soft:#fae1d3;
+  --line:#dfd3c1;--soft:#ebe1d0;--accent:#b93c19;--accent-solid:#b93c19;--accent-soft:#fae1d3;
   --secondary:#2944b9;--green:#262621;--shadow:0 14px 45px #5e42250b;
   --bs-body-color:var(--text);--bs-border-color:var(--line);color-scheme:light;
 }
