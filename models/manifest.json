@@ -1,0 +1,11 @@
+{
+  "model": "MobileNetV2",
+  "format": "ONNX",
+  "classes": 1000,
+  "source": "https://github.com/onnx/models/tree/main/validated/vision/classification/mobilenet",
+  "weights_url": "https://media.githubusercontent.com/media/onnx/models/main/validated/vision/classification/mobilenet/model/mobilenetv2-7.onnx",
+  "sha256": "c1c513582d56afceff8516c73804e484c81c6a830712ab6d682253f4a3cd042f",
+  "bytes": 14246826,
+  "license": "Apache-2.0",
+  "training": "pretrained by upstream authors; inference only in Nexo Lab"
+}

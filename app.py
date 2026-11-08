@@ -6,17 +6,19 @@ import math
 import os
 import threading
 from functools import lru_cache
+from pathlib import Path
+from types import SimpleNamespace
 
 import cv2
 import numpy as np
 from flask import Flask, jsonify, render_template, request, send_file
 from PIL import Image, ImageOps, UnidentifiedImageError
-from sklearn.datasets import load_digits
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from object_model import catalog, classify_object
 
 app = Flask(__name__)
 app.config.update(MAX_CONTENT_LENGTH=9 * 1024 * 1024, MAX_FORM_MEMORY_SIZE=9 * 1024 * 1024)
@@ -36,7 +38,35 @@ def index():
 
 @app.get('/health')
 def health():
-    return jsonify(status='ok', application='Nexo Lab', version='1.0.0')
+    return jsonify(status='ok', application='Nexo Lab', version='2.0.0')
+
+
+@app.get('/api/notebook')
+def download_notebook():
+    path = Path(__file__).resolve().parent/'notebooks'/'Nexo_Lab_Proyecto_3.ipynb'
+    return send_file(path, as_attachment=True, download_name=path.name, mimetype='application/x-ipynb+json')
+
+
+@app.get('/api/objects/catalog')
+def object_catalog():
+    return jsonify(model='MobileNetV2 · ImageNet-1K', total=1000, classes=catalog(),
+                   mode='Clasificación del objeto principal; no detección múltiple.')
+
+
+@app.post('/api/objects')
+def objects():
+    try:
+        image, _ = read_image()
+        predictions, crop = classify_object(image)
+        return jsonify(predictions=predictions, preview=encode(crop), total_classes=1000,
+                       uncertain=predictions[0]['probability'] < 40,
+                       model='MobileNetV2 · ImageNet-1K · pesos preentrenados',
+                       note='Clasifica el contenido principal del recorte central. Puede equivocarse o asignar una clase conocida a un objeto que no pertenece al catálogo.')
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    except (cv2.error, RuntimeError):
+        app.logger.exception('Object inference failed')
+        return jsonify(error='El modelo de objetos no está disponible en este momento. Inténtalo de nuevo.'), 503
 
 
 @app.after_request
@@ -150,10 +180,14 @@ def vision():
 
 @lru_cache(maxsize=1)
 def regression_data():
-    rng = np.random.default_rng(42)
-    x = np.column_stack((rng.uniform(10, 500, 240), rng.uniform(.5, 18, 240), rng.uniform(0, 100, 240)))
-    y = 8 + .095*x[:, 0] + 3.8*x[:, 1] + .18*x[:, 2] + rng.normal(0, 2.5, 240)
-    return x, y
+    data = np.loadtxt(Path(__file__).resolve().parent/'data'/'impresion_3d.csv', delimiter=',', skiprows=1)
+    return data[:, :3], data[:, 3]
+
+
+@lru_cache(maxsize=1)
+def load_digit_dataset():
+    data = np.loadtxt(Path(__file__).resolve().parent/'data'/'digits.csv', delimiter=',', skiprows=1)
+    return SimpleNamespace(data=data[:, :64], images=data[:, :64].reshape(-1,8,8), target=data[:,64].astype(int))
 
 
 def fit_regression(x, y):
@@ -174,7 +208,7 @@ def regression_model():
 
 @lru_cache(maxsize=1)
 def digit_model():
-    digits = load_digits()
+    digits = load_digit_dataset()
     features = np.array([digit_features((image * 255 / 16).astype(np.uint8)).ravel() for image in digits.images])
     x_train, x_test, y_train, y_test = train_test_split(features, digits.target, test_size=.25, random_state=42, stratify=digits.target)
     model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1500, C=.1))
@@ -281,7 +315,7 @@ def train():
 def digit_example(digit):
     if digit not in range(10):
         return jsonify(error='Elige un dígito entre 0 y 9.'), 400
-    digits = load_digits()
+    digits = load_digit_dataset()
     sample = digits.images[np.flatnonzero(digits.target == digit)[0]]
     image = cv2.resize((sample*255/16).astype(np.uint8), (280,280), interpolation=cv2.INTER_NEAREST)
     return jsonify(image=encode(image))

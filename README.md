@@ -4,11 +4,13 @@
 
 Estudiante: **Lorena Abigail Coca Ccorpa** · SENATI · 2026.
 
-## Experiencias
+## Experiencias · versión 2
 
 - **Estudio de visión:** subir, arrastrar o capturar una fotografía; once modos (incluido el original), comparación antes/después, histograma, luminosidad, contraste, nitidez y descarga PNG. Detección de rostros frontales con Haar; no identifica personas ni reconoce emociones.
 - **Taller predictivo:** regresión lineal múltiple para estimar costos de impresión 3D a partir de gramos, horas y complejidad. Explicación de aportes, gráfico real/predicho, R² y MAE calculados sobre prueba, CSV de ejemplo y entrenamiento de experimentos independientes con CSV propio.
 - **Reconocimiento IA:** lienzo táctil para dibujar dígitos, ejemplos del dataset Digits, clasificación con regresión logística, distribución de probabilidades, entrada 8×8 y matriz de confusión.
+- **Reconocer objetos:** MobileNetV2 preentrenada sobre ImageNet, 1000 categorías (incluye más de 100 objetos cotidianos), fotografía o captura de cámara, recorte central, top-5 y catálogo buscable con traducciones frecuentes. Clasifica un contenido principal; no es un detector múltiple ni un sistema de emociones. Pesos ONNX descargados de su fuente oficial y verificados con SHA-256 al primer uso, ejecutados con OpenCV DNN.
+- **Apariencia:** logo PNG y fondo originales generados para el proyecto, títulos de grafiti, animación al desplazarse, movimiento suave y tres temas persistentes: beige, oscuro y blanco. Se respeta `prefers-reduced-motion`.
 - **Ruta de aprendizaje:** relación explícita entre clases y funciones, arquitectura y documentación oficial.
 - **Bitácora:** últimos 100 experimentos en localStorage, exportación JSON y borrado con confirmación. No almacena imágenes.
 
@@ -46,6 +48,8 @@ Frontend HTML/Jinja + Bootstrap 5.3.8 + CSS propio + JavaScript → API Flask �
 | `POST /api/train` | CSV multipart `dataset`, experimento independiente |
 | `GET /api/digit-example/0` | Ejemplo del dataset, números del 0 al 9 |
 | `POST /api/digits` | Clasificar imagen multipart `image` |
+| `GET /api/objects/catalog` | Las 1000 categorías de ImageNet |
+| `POST /api/objects` | Imagen multipart `image`, top-5 y recorte de entrada |
 
 ## Datos, evaluación y límites
 
@@ -77,7 +81,7 @@ El plan gratuito puede suspenderse por inactividad; el primer acceso puede tarda
 
 ## Recursos y créditos
 
-- Identidad Nexo Lab: símbolo SVG original y diseño propio para el proyecto. No representa un producto oficial de SENATI.
+- Identidad Nexo Lab v2: logo raster `static/logo-graffiti.webp` y collage `static/creative-background.webp`, generados con ImageGen para este proyecto. El antiguo símbolo radial fue retirado. No representa un producto oficial de SENATI.
 - Fotografía de robótica: [Unsplash, imagen 1485827404703-89b55fcc595e](https://images.unsplash.com/photo-1485827404703-89b55fcc595e), copia local `static/lab-hero.jpg`.
 - Fotografía de montaña: [Unsplash, imagen 1464822759023-fed622ff2c3b](https://images.unsplash.com/photo-1464822759023-fed622ff2c3b), copia local `static/vision-sample.jpg`.
 - [Licencia Unsplash](https://unsplash.com/license).
@@ -91,5 +95,17 @@ Se revisó EduShield IA del mensual 2 (alerta de deserción y seguimiento) y los
 
 ## Cuaderno académico
 
-El archivo notebooks/Nexo_Lab_Proyecto_3.ipynb reproduce la exploración de datos, entrenamiento, explicación de predicciones, clasificación y filtros. Ábrelo con Jupyter o VS Code con soporte para notebooks; utiliza el mismo entorno de requirements.txt. Para visualizar imágenes necesita IPython, incluido en Jupyter.
+El archivo `notebooks/Nexo_Lab_Proyecto_3.ipynb` está ejecutado e incluye análisis exploratorio, entrenamiento explícito, línea base, validación cruzada de regresión, diagnóstico de residuos, distribución de clases, matriz de confusión y aumento de imágenes de entrenamiento por rotación. También ejecuta MobileNetV2 sobre tres ejemplos y muestra sus errores. Instala `python -m pip install -r requirements-notebook.txt` para repetirlo en Jupyter o VS Code. Sus 21 celdas contienen resultados y gráficos calculados, no inventados.
 
+
+## Modelo de objetos y recursos v2
+
+Pesos: `models/mobilenetv2-7.onnx`, ONNX Model Zoo, MobileNetV2, Apache 2.0. Se descargan automáticamente al primer reconocimiento si no existen; no se versiona el binario. El tamaño y SHA-256 se verifican contra `models/manifest.json` antes de una sustitución atómica. La primera solicitud de cada instancia nueva puede tardar mientras se descargan 14 MB. Si falla la red, la API devuelve un error 503 explicativo y permite reintentar. Se incluyen la licencia y el README original en `models/`. Las 1000 etiquetas provienen de `pytorch/hub/imagenet_classes.txt`, en el mismo orden ImageNet-1K. Las traducciones son ayudas de interfaz, no nuevas clases. El vocabulario completo es consultable en la aplicación.
+
+La red fue entrenada por sus autores. En Nexo Lab se ejecuta la inferencia; no se afirma haber entrenado un modelo de 1000 clases desde cero. El cuaderno sí entrena la regresión y dos clasificadores de dígitos (base y aumento). El dataset Digits y los costos están insertados en CSV en `data/` y se usan también en el backend.
+
+Preprocesamiento de objetos: recorte cuadrado central previo a resize 256 para limitar memoria en fotos panorámicas, recorte central 224, RGB, escala [0,1], media [0.485,0.456,0.406], desviación [0.229,0.224,0.225], softmax. Solo un objeto principal; no hay cajas, conteos ni inferencia de emociones. Si una clase no existe en ImageNet, el modelo puede proponer una clase incorrecta. Menos del 40% en top-1 se presenta como resultado incierto. Ese umbral es una indicación de interfaz, no un detector calibrado de objetos desconocidos.
+
+Fotografías de ejemplo (copias locales, Unsplash): laptop `photo-1496181133206-80ce9b88a853`, plátanos `photo-1571771894821-ce9b6c11b08e`, café `photo-1495474472287-4d71bcdd2085`. Son ejemplos exploratorios, no un conjunto para informar precisión de ImageNet. La foto de café ilustra una confusión del recorte central; se conservan los resultados reales y no se fuerza una etiqueta.
+
+La cámara solo envía una captura al pulsar el botón y se detiene al salir de la sección, cerrar la captura o poner la página en segundo plano. Las imágenes se procesan en memoria y no se escriben en el servidor. La inferencia DNN se serializa con un lock para compartir con seguridad la red en los dos hilos Gunicorn.

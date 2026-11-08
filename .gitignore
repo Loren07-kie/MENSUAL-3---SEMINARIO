@@ -6,3 +6,8 @@ __pycache__/
 artifacts/
 .DS_Store
 *.log
+models/mobilenetv2-7.onnx
+models/*.part
+
+static/logo-graffiti.png
+static/creative-background.png

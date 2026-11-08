@@ -24,7 +24,7 @@ class LabTests(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Nexo Lab', response.text)
-        for path in ['app.js', 'style.css', 'brand.svg', 'lab-hero.jpg', 'vision-sample.jpg']:
+        for path in ['app.js', 'style.css', 'street.css', 'objects.js', 'experience.js', 'logo-graffiti.webp', 'creative-background.webp', 'vision-sample.jpg']:
             with self.subTest(path=path):
                 response = self.client.get('/static/' + path)
                 self.assertEqual(response.status_code, 200)
@@ -94,6 +94,27 @@ class LabTests(unittest.TestCase):
         blank = cv2.imencode('.png', np.full((280, 280, 3), (31, 41, 23), dtype=np.uint8))[1].tobytes()
         self.assertEqual(self.client.post('/api/digits', data={'image': (io.BytesIO(blank), 'blank.png')}).status_code, 400)
         self.assertEqual(self.client.get('/api/digit-example/12').status_code, 400)
+
+    def test_object_catalog_and_real_inference(self):
+        from pathlib import Path
+        response = self.client.get('/api/objects/catalog')
+        self.assertEqual(response.status_code, 200)
+        catalog = response.json['classes']
+        self.assertEqual(len(catalog), 1000)
+        self.assertEqual(len(set(c['id'] for c in catalog)), 1000)
+        self.assertGreater(sum(c['group'] == 'Objetos y alimentos' for c in catalog), 100)
+        self.assertIn('ballpoint', [c['original'] for c in catalog])
+        for sample, expected in [('banana','banana'),('laptop','notebook')]:
+            raw = (Path(__file__).resolve().parents[1]/'static'/f'object-{sample}.jpg').read_bytes()
+            response = self.client.post('/api/objects', data={'image': (io.BytesIO(raw),sample+'.jpg')})
+            self.assertEqual(response.status_code, 200)
+            data = response.json
+            self.assertEqual(data['total_classes'], 1000)
+            self.assertEqual(len(data['predictions']), 5)
+            self.assertEqual(data['predictions'][0]['original'], expected)
+            self.assertGreater(data['predictions'][0]['probability'], 40)
+        self.assertEqual(self.client.post('/api/objects').status_code,400)
+        self.assertEqual(self.client.post('/api/objects',data={'image':(io.BytesIO(b'bad'),'bad.png')}).status_code,400)
 
 
 if __name__ == '__main__':
